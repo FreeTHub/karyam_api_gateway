@@ -3,16 +3,17 @@ import { config } from 'dotenv';
 import express, { Application, Request, Response, json, urlencoded } from 'express';
 import helmet from 'helmet';
 import morgan from 'morgan';
+import { configMain } from './config';
 import { errorHandler, notFound } from './http/middlewares/errorHandler.middleware';
+import { AxiosService } from './http/services/axios.service';
 import RoutesMain from './routes';
 import { logger } from './utils/logger';
-config({path:".env.local"});
+config({ path: '.env.dev' });
 class ExpressApp {
 	private app: Application;
 	private PORT: unknown;
 	private routesMain = new RoutesMain();
 	constructor() {
-
 		this.app = express();
 		this.PORT = process.env.PORT ?? 5000;
 		this.middleware();
@@ -37,11 +38,12 @@ class ExpressApp {
 		this.app.use(notFound);
 	}
 	public listen(): void {
-		// connectDB();
+		configMain.connectDatabase();
+		const _axiosInstance = new AxiosService({ baseurl: 'localhost', serviceName: 'AuthService' });
 		this.app.listen(this.PORT, () => {
 			logger.info(`=================================`);
-      logger.info(`🚀 App listening on the port ${this.PORT!}`);
-      logger.info(`=================================`);
+			logger.info(`🚀 App listening on the port ${this.PORT!}`);
+			logger.info(`=================================`);
 		});
 	}
 }

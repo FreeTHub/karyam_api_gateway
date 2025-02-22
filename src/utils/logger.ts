@@ -5,7 +5,7 @@ import { join } from 'path';
 import winston from 'winston';
 import winstonDaily from 'winston-daily-rotate-file';
 console.log('hello');
-config({path:".env.local"});
+config({ path: '.env.dev' });
 
 
 // logs dir
