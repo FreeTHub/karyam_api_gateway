@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { config } from 'dotenv';
 import { sign } from 'jsonwebtoken';
 import keysDocumentsModel from '../../schema/keysDocuments.schema';
@@ -15,7 +16,7 @@ export class AxiosService {
 		});
 	}
 	public async axiosCreateInstance(): Promise<ReturnType<typeof this.axios.create>> {
-		let gatewayToken: string = '';
+		let jwtGatewayToken: string = '';
 
 		if (SERVICES.includes(this.serviceName)) {
 			const _keysDocuments = await keysDocumentsModel.find();
@@ -23,19 +24,21 @@ export class AxiosService {
 			const authServerGatewaySignature = _keysDocuments.find((self) => self.keyName === 'auth_server_gateway_signature');
 
 			const expiresDateTimeStamp = new Date().toISOString(); // expiry date
-			gatewayToken = sign(
+			jwtGatewayToken = sign(
 				{ id: this.serviceName, expiresDateTimeStamp, gatewayToken: _gatewaysecretToken?.valueName ?? 'secret' },
-				authServerGatewaySignature?.valueName ?? ''
+				authServerGatewaySignature?.valueName ?? 'secret',
+				{ expiresIn: 60 * 1000, algorithm: 'HS256' }
 			);
-			const instance: ReturnType<typeof this.axios.create> = this.axios.create({
+			console.log('jwtGatewayToken: ', jwtGatewayToken);
+			const instance: ReturnType<typeof this.axios.create> = axios.create({
 				baseURL: this.baseurl,
 				headers: {
 					'Content-Type': 'application/json',
 					'Accept': 'application/json',
-					gatewayToken
+					jwtGatewayToken
 				}
 			});
-			return gatewayToken;
+			return instance;
 		}
 	}
 }

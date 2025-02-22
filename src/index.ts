@@ -39,7 +39,7 @@ class ExpressApp {
 	}
 	public listen(): void {
 		configMain.connectDatabase();
-		const _axiosInstance = new AxiosService({ baseurl: 'localhost', serviceName: 'AuthService' });
+		const _axiosInstance = new AxiosService({ baseurl: 'localhost', serviceName: 'AUTHSERVICE' });
 		this.app.listen(this.PORT, () => {
 			logger.info(`=================================`);
 			logger.info(`🚀 App listening on the port ${this.PORT!}`);

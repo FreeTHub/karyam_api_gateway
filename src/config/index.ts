@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { logger } from '../utils/logger';
 
 export class configMain {
 	static async connectDatabase() {
@@ -17,11 +18,11 @@ export class configMain {
 
 		const { connection } = mongoose;
 		if (connection.readyState >= 1) {
-			console.log('database connected successfully');
+			logger.info('Mongodb database connected successfully');
 			return;
 		}
 		connection.on('error', () => {
-			console.log(`database not connected try again`);
+			logger.error(`database not connected try again`);
 		});
 	}
 }
