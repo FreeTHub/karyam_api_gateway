@@ -1,0 +1,1151 @@
+tags:
+  - name: common
+    description: common API
+
+paths:
+  /api/ptax/enrol/health:
+    get:
+      tags:
+        - Global
+      summary: Check backend health
+      responses:
+        200:
+          description: 'OK'
+        500:
+          description: 'Server Error'
+
+  /api/ptax/enrol/common/get-districts:
+    get:
+      tags:
+        - common
+      summary: Get all districts
+      responses:
+        200:
+          description: 'OK'
+        500:
+          description: 'Server Error'
+
+  /api/ptax/enrol/common/get-sub-div-by-dist:
+    post:
+      tags:
+        - common
+      summary: Get all sub divisions
+      parameters:
+        - name: body
+          in: body
+          description: Get all sub divisions
+          required: true
+          schema:
+            $ref: '#/definitions/get-sub-div-by-dist'
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+  /api/ptax/enrol/common/get-pol-stn-by-subdiv:
+    post:
+      tags:
+        - common
+      summary: Get all police stations
+      parameters:
+        - name: body
+          in: body
+          description: Get all police stations
+          required: true
+          schema:
+            $ref: '#/definitions/get-pol-stn-by-subdiv'
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+  /api/ptax/enrol/amend/get-enrol-details:
+    post:
+      tags:
+        - amend
+      summary: Get enrolment details
+      parameters:
+        - name: body
+          in: body
+          description: Get enrolment details
+          required: true
+          schema:
+            $ref: '#/definitions/get-enrol-details'
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+  /api/ptax/enrol/common/get-pan-details:
+    post:
+      tags:
+        - Wrapper
+      summary: Get pan details from external API
+      parameters:
+        - name: body
+          in: body
+          description: Get pan details
+          required: true
+          schema:
+            $ref: '#/definitions/get-pan-details'
+      responses:
+        201:
+          description: 'Created'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+  /api/ptax/enrol/common/get-gst-details:
+    post:
+      tags:
+        - Wrapper
+      summary: Get gstin details from external API
+      parameters:
+        - name: body
+          in: body
+          description: Get gst details
+          required: true
+          schema:
+            $ref: '#/definitions/get-gst-details'
+      responses:
+        201:
+          description: 'Created'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+  /api/ptax/enrol/common/get-gst-by-pan-details:
+    post:
+      tags:
+        - Wrapper
+      summary: Get gstin details from external API
+      parameters:
+        - name: body
+          in: body
+          description: Get gst details
+          required: true
+          schema:
+            $ref: '#/definitions/get-gst-by-pan-details'
+      responses:
+        201:
+          description: 'Created'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+  /api/ptax/enrol/common/get-details:
+    post:
+      tags:
+        - common
+      summary: Get PAN or Enrolment details
+      parameters:
+        - name: body
+          in: body
+          description: Get get details from pan number
+          required: true
+          schema:
+            $ref: '#/definitions/get-details'
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+  /api/ptax/enrol/common/verify-otp:
+    post:
+      tags:
+        - common
+      summary: Verify otp sent to your email or phone number
+      parameters:
+        - name: body
+          in: body
+          description: Verify otp sent to your email or phone number
+          required: true
+          schema:
+            $ref: '#/definitions/verify-otp'
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+  /api/ptax/enrol/common/generate-otp:
+    post:
+      tags:
+        - common
+      summary: Generate otp for your email or phone number
+      parameters:
+        - name: body
+          in: body
+          description: Generate otp for your email or phone number
+          required: true
+          schema:
+            $ref: '#/definitions/generate-otp'
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+  /api/ptax/enrol/common/check-active-enrolment:
+    post:
+      tags:
+        - common
+      summary: Check whether any enrolment presents for this PAN number or not
+      parameters:
+        - name: body
+          in: body
+          description: Check whether any enrolment presents for this PAN number or not
+          required: true
+          schema:
+            $ref: '#/definitions/check-active-enrolment'
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+  /api/ptax/common/save-forgot-password:
+    post:
+      tags:
+        - common
+      summary: Forgot Password, New Password Save
+      parameters:
+        - name: body
+          in: body
+          description: Forgot Password, New Password Save
+          required: true
+          schema:
+            $ref: '#/definitions/save-forgot-password'
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+  /api/ptax/enrol/common/save-enrolment:
+    post:
+      tags:
+        - common
+      summary: Save enrolment details
+      parameters:
+        - name: body
+          in: body
+          description: Save enrolment details
+          required: true
+          schema:
+            $ref: '#/definitions/save-enrolment'
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+  /api/ptax/enrol/common/ptax-enrol-pay-dashboard:
+    post:
+      tags:
+        - common
+      summary: Get Enrolment Payment Dashboard Data
+      parameters:
+        - name: body
+          in: body
+          description: Get PTAX Enrolment Payment Dashboard Data, Only Send the EnrolmentNo
+          required: true
+          schema:
+            $ref: '#/definitions/ptax-enrol-pay-dashboard'
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+  /api/ptax/enrol/common/ptax-enrol-paynow:
+    post:
+      tags:
+        - common
+      summary: Pay for Specific Period for Enrolment
+      parameters:
+        - name: body
+          in: body
+          description: Pay for Specific Period for Enrolment
+          required: true
+          schema:
+            $ref: '#/definitions/ptax-enrol-paynow'
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+  /api/ptax/enrol/common/ptax-calculate-payable-years:
+    post:
+      tags:
+        - common
+      summary: Calculate the Payable Years
+      parameters:
+        - name: body
+          in: body
+          description: Calculate the Payable Years for new Enrolment
+          required: true
+          schema:
+            $ref: '#/definitions/ptax-calculate-payable-years'
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+  /api/ptax/enrol/common/ptax-pay-enrol-tax-first-time:
+    post:
+      tags:
+        - common
+      summary: PTAX Pay Enrol Tax First Time
+      parameters:
+        - name: body
+          in: body
+          description: PTAX Pay Enrol Tax First Time
+          required: true
+          schema:
+            $ref: '#/definitions/ptax-pay-enrol-tax-first-time'
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+  /api/ptax/enrol/common/ptax-enrol-pay-history:
+    post:
+      tags:
+        - common
+      summary: Get Enrolment Payment History
+      parameters:
+        - name: body
+          in: body
+          description: Get PTAX Enrolment Payment History, Only Send the EnrolmentNo
+          required: true
+          schema:
+            $ref: '#/definitions/ptax-enrol-pay-history'
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+
+  /api/ptax/enrol/common/ptax-details-master:
+    get:
+      tags:
+        - common
+      summary: Get all ptax details
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+  /api/ptax/enrol/common/get-all-banks:
+    get:
+      tags:
+        - common
+      summary: Get all Banks
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+  /api/ptax/enrol/common/get-all-acc-types:
+    get:
+      tags:
+        - common
+      summary: Get all Account Types
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+  /api/ptax/enrol/common/dist-wise-all-pol-stn:
+    get:
+      tags:
+        - common
+      summary: Get all Police stations
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+  /api/ptax/enrol/common/get-all-nature-of-business:
+    get:
+      tags:
+        - common
+      summary: Get all Nature of Business
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+  /api/ptax/enrol/common/test:
+    get:
+      tags:
+        - common
+      summary: Send Attchment To Mail
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+  /api/ptax/enrol/amend/get-all-doc-types:
+    get:
+      tags:
+        - amend
+      summary: Get all document types for upload
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+  /api/ptax/enrol/users/get-enrol-dtls:
+    post:
+      tags:
+        - users
+      summary: Get enrolment details
+      parameters:
+        - name: body
+          in: body
+          description: Get enrolment details
+          required: true
+          schema:
+            $ref: '#/definitions/get-enrol-dtls'
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+  /api/ptax/enrol/users/get-all-enrolments:
+    post:
+      tags:
+        - users
+      summary: Get enrolment details
+      parameters:
+        - name: body
+          in: body
+          description: Get enrolment details
+          required: true
+          schema:
+            $ref: '#/definitions/get-all-enrolments'
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+  /api/ptax/enrol/cancellation/get-canc-reasons:
+    get:
+      tags:
+        - cancellation
+      summary: Get all cancellation reasons
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+  /api/ptax/enrol/users/get-mob-no:
+    post:
+      tags:
+        - users
+      summary: Get mobile number of a enrolment
+      parameters:
+        - name: body
+          in: body
+          description: Get mobile number of a enrolment
+          required: true
+          schema:
+            $ref: '#/definitions/get-mob-no'
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+  /api/ptax/enrol/amend/outer-mob-amend-req:
+    post:
+      tags:
+        - amend
+      summary: Outer amendment request for phone number
+      parameters:
+        - name: body
+          in: body
+          description: Outer amendment request for phone number
+          required: true
+          schema:
+            $ref: '#/definitions/outer-mob-amend-req'
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+  /api/ptax/enrol/users/get-enrol-short-dtls/{enrolNo}:
+    get:
+      tags:
+        - users
+      summary: Get short enrolment details
+      parameters:
+        - name: enrolNo
+          in: path
+          description: Enrolment number
+          required: true
+          type: string
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+  # # [GET] users
+  # /users:
+  #   get:
+  #     tags:
+  #       - users
+  #     summary: Find All Users
+  #     responses:
+  #       200:
+  #         description: 'OK'
+  #       500:
+  #         description: 'Server Error'
+
+  #   # [POST] users
+  #   post:
+  #     tags:
+  #       - users
+  #     summary: Add User
+  #     parameters:
+  #       - name: body
+  #         in: body
+  #         description: user Data
+  #         required: true
+  #         schema:
+  #           $ref: '#/definitions/users'
+  #     responses:
+  #       201:
+  #         description: 'Created'
+  #       400:
+  #         description: 'Bad Request'
+  #       409:
+  #         description: 'Conflict'
+  #       500:
+  #         description: 'Server Error'
+
+  # # [GET] users/id
+  # /users/{id}:
+  #   get:
+  #     tags:
+  #       - users
+  #     summary: Find User By Id
+  #     parameters:
+  #       - name: id
+  #         in: path
+  #         description: User Id
+  #         required: true
+  #         type: integer
+  #     responses:
+  #       200:
+  #         description: 'OK'
+  #       409:
+  #         description: 'Conflict'
+  #       500:
+  #         description: 'Server Error'
+
+  #   # [PUT] users/id
+  #   put:
+  #     tags:
+  #       - users
+  #     summary: Update User By Id
+  #     parameters:
+  #       - name: id
+  #         in: path
+  #         description: user Id
+  #         required: true
+  #         type: integer
+  #       - name: body
+  #         in: body
+  #         description: user Data
+  #         required: true
+  #         schema:
+  #           $ref: '#/definitions/users'
+  #     responses:
+  #       200:
+  #         description: 'OK'
+  #       400:
+  #         description: 'Bad Request'
+  #       409:
+  #         description: 'Conflict'
+  #       500:
+  #         description: 'Server Error'
+
+  #   # [DELETE] users/id
+  #   delete:
+  #     tags:
+  #       - users
+  #     summary: Delete User By Id
+  #     parameters:
+  #       - name: id
+  #         in: path
+  #         description: user Id
+  #         required: true
+  #         type: integer
+  #     responses:
+  #       200:
+  #         description: 'OK'
+  #       409:
+  #         description: 'Conflict'
+  #       500:
+  #         description: 'Server Error'
+
+# definitions
+definitions:
+  get-details:
+    type: object
+    required:
+      - pan_or_enrol_no
+    properties:
+      pan_or_enrol_no:
+        type: string
+        description: Enter pan or enrol number
+
+  get-pan-details:
+    type: object
+    required:
+      - pan_number
+    properties:
+      pan_number:
+        type: string
+        description: Pan number of a conpany or personal
+
+  get-gst-details:
+    type: object
+    required:
+      - gstin
+    properties:
+      gstin:
+        type: string
+        description: Gst number of a conpany
+
+  get-gst-by-pan-details:
+    type: object
+    required:
+      - pan_number
+    properties:
+      pan_number:
+        type: string
+        description: Pan number of a conpany
+
+  get-sub-div-by-dist:
+    type: object
+    required:
+      - dist_id
+    properties:
+      dist_id:
+        type: string
+        description: District id
+
+  get-enrol-details:
+    type: object
+    required:
+      - enrol_no
+    properties:
+      enrol_no:
+        type: string
+        description: Enrolment Number
+
+  get-enrol-dtls:
+    type: object
+    required:
+      - enrol_no
+    properties:
+      enrol_no:
+        type: string
+        description: Enrolment Number
+
+  get-pol-stn-by-subdiv:
+    type: object
+    required:
+      - sub_div_id
+    properties:
+      sub_div_id:
+        type: string
+        description: Sub division id
+
+  ptax-enrol-pay-dashboard:
+    type: object
+    required:
+      - enrolmentNo
+    properties:
+      enrolmentNo:
+        type: string
+        description: Enter Enrolment Number
+
+  ptax-pay-enrol-tax-first-time:
+    type: object
+    # items:
+    #   oneOf:
+    #     $ref: '#/definitions/ptax-enrol-pay-first'
+    required:
+      - payment_details
+    properties:
+      payment_details:
+        type: array
+        items:
+          oneOf:
+            $ref: '#/definitions/ptax-enrol-pay-first'
+        description: Payment Details
+
+
+  ptax-enrol-pay-first:
+    type: object
+    required:
+      - enrol_no
+      - payment_mode
+      - frequency
+      - period_from
+      - period_to
+      - total_amount
+      - hoa
+    properties:
+      enrol_no:
+        type: string
+        description: Enter Enrolment Number
+      payment_mode:
+        type: string
+        description: Enter Payment Mode
+      frequency:
+        type: string
+        description: Enter Frequency of payment
+      period_from:
+        type: string
+        description: Enter Period From
+      period_to:
+        type: string
+        description: Enter Period To
+      total_amount:
+        type: number
+        description: Enter Total Amount
+      hoa:
+        type: array
+        description: Enter Head of Account
+        items:
+          oneOf:
+            $ref: '#/definitions/hoas'
+      case_no:
+        type: string
+        description: Enter Case No (if any)
+      transaction_slab:
+        type: string
+        description: Enter Transaction Slab (if applicable)
+
+  ptax-calculate-payable-years:
+    type: object
+    required:
+      - schedule_sl
+      - commencement_date
+    properties:
+      schedule_sl:
+        type: array
+        items:
+          type: number
+        description: Serial
+      commencement_date:
+        type: string
+        description: Commencement Date
+      gst:
+        type: string
+        description: GSTIN
+
+  ptax-enrol-paynow:
+    type: object
+    required:
+      - enrol_no
+      - payment_mode
+      - frequency
+      - period_from
+      - period_to
+      - total_amount
+      - hoa
+    properties:
+      enrol_no:
+        type: string
+        description: Enter Enrolment Number
+      payment_mode:
+        type: string
+        description: Enter Payment Mode
+      frequency:
+        type: string
+        description: Enter Frequency of payment
+      period_from:
+        type: string
+        description: Enter Period From
+      period_to:
+        type: string
+        description: Enter Period To
+      total_amount:
+        type: number
+        description: Enter Total Amount
+      hoa:
+        type: array
+        description: Enter Head of Account
+        items:
+          oneOf:
+            $ref: '#/definitions/hoas'
+      case_no:
+        type: string
+        description: Enter Case No (if any)
+      transaction_slab:
+        type: string
+        description: Enter Transaction Slab (if applicable)
+  hoas:
+    type: object
+    properties:
+      h_o_a:
+        type: string;
+        description: Head of Account
+      amount:
+        type: number
+        description: HOA Amount
+
+  ptax-enrol-pay-history:
+    type: object
+    required:
+      - enrolmentNo
+    properties:
+      enrolmentNo:
+        type: string
+        description: Enter Enrolment Number
+
+  verify-otp:
+    type: object
+    required:
+      - otp_sent_on
+      - otp
+    properties:
+      otp_sent_on:
+        type: string
+        description: Email or Phone number
+      otp:
+        type: string
+        description: Actual OTP
+
+  generate-otp:
+    type: object
+    properties:
+      otp_sent_on:
+        type: string
+        description: Email or Phone number
+      enrlment_no:
+        type: string
+        description: Enrolment number
+      send_to:
+        type: string
+        description: E for Email, M for Mobile
+      enc:
+        type: boolean
+        description: payload is encrypted or not
+
+  check-active-enrolment:
+    type: object
+    required:
+      - pan_number
+    properties:
+      pan_number:
+        type: string
+        description: Enter PAN number
+
+  save-forgot-password:
+    type: object
+    required:
+      - panEnrolNo
+      - new_password
+    properties:
+      panEnrolNo:
+        type: string
+        description: Enter Enrol number
+      new_password:
+        type: string
+        description: Enter New Password
+
+  trade_info_details:
+    type: object
+    required:
+      - trade_name
+      - trade_address
+    properties:
+      trade_name:
+        type: string
+        description: Trade name
+      trade_address:
+        type: string
+        description: Trade Address
+
+  schedule_info_dtls:
+    type: object
+    required:
+      - schedule_sl
+      - schedule_sl_dtls_cd
+    properties:
+      schedule_sl:
+        type: string
+        description: Schedule sl
+      schedule_sl_dtls_cd:
+        type: string
+        description: Schedule sl details code
+      schedule_sl_dtls_id:
+        type: string
+        description: Schedule sl details id
+
+  income_turnover_info:
+    type: object
+    required:
+      - trade_name
+      - trade_address
+    properties:
+      trade_name:
+        type: string
+        description: Trade name
+      trade_address:
+        type: string
+        description: Trade Address
+
+  save-enrolment:
+    type: object
+    required:
+      - is_saved
+      - enrol_no
+    properties:
+      is_saved:
+        type: boolean
+        description: true for save, false for submit
+      enrol_no:
+        type: string
+        description: Enrolment number for this enrolment
+      mobile:
+        type: string
+        description: Mobile Number
+      mobile_verified:
+        type: boolean
+        description: Indicate that the mobile number is verified or not
+      email:
+        type: string
+        description: Email address
+      email_verified:
+        type: boolean
+        description: Indicate that the email id is verified or not
+      pan:
+        type: string
+        description: PAN Number
+      gstin:
+        type: string
+        description: GSTIN number
+      district:
+        type: string
+        description: district id
+      sub_division:
+        type: string
+        description: sub division
+      ps:
+        type: string
+        description: police station
+      jurisdiction:
+        type: string
+        description: Jurisdiction
+      commencement_date:
+        type: string
+        description: Commencement date
+      trade_info:
+        type: array
+        description: Enter trade information
+        items:
+          oneOf:
+            $ref: '#/definitions/trade_info_details'
+      income_turnover:
+        type: array
+        description: Enter income turnover info
+        items:
+          oneOf:
+            $ref: '#/definitions/income_turnover_info'
+      ptax_payable:
+        type: number
+        description: Enter payable info
+      schedule_info:
+        type: array
+        description: Enter schedule info
+        items:
+          oneOf:
+            $ref: '#/definitions/schedule_info_dtls'
+      bank_info:
+        type: object
+        required:
+          - bank_cd
+          - bank_branch_name
+          - bank_branch_address
+          - bank_acc_no
+          - bank_branch_ifsc
+          - acc_type_cd
+        properties:
+          bank_cd:
+            type: string
+            description: Bank code
+          bank_branch_name:
+            type: string
+            description: Branch name
+          bank_branch_address:
+            type: string
+            description: Branch address
+          bank_acc_no:
+            type: string
+            description: Account number
+          bank_branch_ifsc:
+            type: string
+            description: Branch ifsc
+          acc_type_cd:
+            type: string
+            description: Account type code
+
+  get-all-enrolments:
+    type: object
+    required:
+      - pan
+    properties:
+      pan:
+        type: string
+        description: PAN Number
+
+  get-mob-no:
+    type: object
+    required:
+      - enrol_no
+      - pan_no
+    properties:
+      enrol_no:
+        type: string
+        description: Enrolment number
+      pan_no:
+        type: string
+        description: PAN number
+
+  outer-mob-amend-req:
+    type: object
+    required:
+      - enrol_no
+      - pan_number
+      - old_phone
+      - new_phone
+    properties:
+      enrol_no:
+        type: string
+        description: Enrolment number
+      pan_number:
+        type: string
+        description: PAN number
+      old_phone:
+        type: string
+        description: Old phone number of the given enrolment
+      new_phone:
+        type: string
+        description: New phone number for this enrolment
+
+  # ptax-enrol-pay-history:
+  #   type: object
+  #   required:
+  #     - enrolmentNo
+  #   properties:
+  #     enrolmentNo:
+  #       type: string
+  #       description: Enter Enrolment Number
+
+  # users:
+  #   type: object
+  #   required:
+  #     - email
+  #     - password
+  #   properties:
+  #     id:
+  #       type: integer
+  #       description: user Id
+  #     email:
+  #       type: string
+  #       description: user Email
+  #     password:
+  #       type: string
+  #       description: user Password
+
+schemes:
+  - https
+  - http
