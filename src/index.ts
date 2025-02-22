@@ -5,12 +5,14 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import { errorHandler, notFound } from './http/middlewares/errorHandler.middleware';
 import RoutesMain from './routes';
+import { logger } from './utils/logger';
+config({path:".env.local"});
 class ExpressApp {
 	private app: Application;
 	private PORT: unknown;
 	private routesMain = new RoutesMain();
 	constructor() {
-		config({ path: 'env.local' });
+
 		this.app = express();
 		this.PORT = process.env.PORT ?? 5000;
 		this.middleware();
@@ -37,7 +39,9 @@ class ExpressApp {
 	public listen(): void {
 		// connectDB();
 		this.app.listen(this.PORT, () => {
-			console.log(`Server is listening on  port : ${this.PORT}`);
+			logger.info(`=================================`);
+      logger.info(`🚀 App listening on the port ${this.PORT!}`);
+      logger.info(`=================================`);
 		});
 	}
 }
