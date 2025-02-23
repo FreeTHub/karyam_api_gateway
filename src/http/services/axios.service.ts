@@ -2,7 +2,7 @@ import axios from 'axios';
 import { config } from 'dotenv';
 import { sign } from 'jsonwebtoken';
 import keysDocumentsModel from '../../schema/keysDocuments.schema';
-import { SERVICES } from '../../utils';
+import { APIMETHODS, SERVICES } from '../../utils';
 config({ path: '.env.local' });
 export class AxiosService {
 	private readonly baseurl: string;
@@ -11,11 +11,8 @@ export class AxiosService {
 	constructor({ baseurl, serviceName }: { baseurl: string; serviceName: string }) {
 		this.baseurl = baseurl;
 		this.serviceName = serviceName;
-		this.axiosCreateInstance().then((res) => {
-			this.axios = res;
-		});
 	}
-	public async axiosCreateInstance(): Promise<ReturnType<typeof this.axios.create>> {
+	public async invokeService({ suburl, apiMethods, body }: { apiMethods: APIMETHODS; suburl: string; body: any }): Promise<any> {
 		let jwtGatewayToken: string = '';
 
 		if (SERVICES.includes(this.serviceName)) {
@@ -29,8 +26,12 @@ export class AxiosService {
 				authServerGatewaySignature?.valueName ?? 'secret',
 				{ expiresIn: 60 * 1000, algorithm: 'HS256' }
 			);
-			console.log('jwtGatewayToken: ', jwtGatewayToken);
-			const instance: ReturnType<typeof this.axios.create> = axios.create({
+
+			console.log('====================================');
+			console.log('34 hit');
+			console.log('====================================');
+
+			const instance: ReturnType<typeof axios.create> = axios.create({
 				baseURL: this.baseurl,
 				headers: {
 					'Content-Type': 'application/json',
@@ -38,7 +39,18 @@ export class AxiosService {
 					jwtGatewayToken
 				}
 			});
-			return instance;
+			switch (apiMethods) {
+				case APIMETHODS.get:
+					return instance.get(suburl);
+				case APIMETHODS.post:
+					return instance.post(suburl, body);
+				case APIMETHODS.put:
+					return instance.put(suburl, body);
+				case APIMETHODS.delete:
+					return instance.delete(suburl, body);
+				default:
+					return;
+			}
 		}
 	}
 }

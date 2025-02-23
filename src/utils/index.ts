@@ -97,3 +97,10 @@ export const isEmpty = (value: string | number | object): boolean => {
 };
 
 export const SERVICES=["AUTHSERVICE"]
+
+export enum APIMETHODS {
+	get = 'get',
+	post = 'pos',
+	put = 'put',
+	delete = 'delete'
+}

@@ -5,8 +5,8 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import { configMain } from './config';
 import { errorHandler, notFound } from './http/middlewares/errorHandler.middleware';
-import { AxiosService } from './http/services/axios.service';
 import RoutesMain from './routes';
+import keysDocumentsModel from './schema/keysDocuments.schema';
 import { logger } from './utils/logger';
 config({ path: '.env.dev' });
 class ExpressApp {
@@ -39,7 +39,15 @@ class ExpressApp {
 	}
 	public listen(): void {
 		configMain.connectDatabase();
-		const _axiosInstance = new AxiosService({ baseurl: 'localhost', serviceName: 'AUTHSERVICE' });
+		(async () => {
+			const _keysDocuments = await keysDocumentsModel.find();
+			const _gatewaysecretToken = _keysDocuments.find((self) => self.keyName === 'gateway_token');
+			const authServerGatewaySignature = _keysDocuments.find((self) => self.keyName === 'auth_server_gateway_signature');
+			this.app.set('gateway_token', _gatewaysecretToken?.valueName);
+			this.app.set('auth_server_gateway_signature', authServerGatewaySignature?.valueName);
+		})();
+
+
 		this.app.listen(this.PORT, () => {
 			logger.info(`=================================`);
 			logger.info(`🚀 App listening on the port ${this.PORT!}`);
