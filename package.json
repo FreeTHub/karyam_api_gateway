@@ -5,6 +5,8 @@
 	"author": "Manoj Santra",
 	"license": "MIT",
 	"dependencies": {
+		"bcrypt": "^5.1.1",
+		"bcryptjs": "^3.0.2",
 		"class-sanitizer": "^1.0.1",
 		"class-transformer": "^0.5.1",
 		"class-validator": "^0.14.1",
@@ -16,6 +18,10 @@
 		"mongoose": "^6.9.0",
 		"morgan": "^1.10.0",
 		"nodemailer": "^6.9.16",
+		"passport": "^0.7.0",
+		"passport-google-oauth20": "^2.0.0",
+		"passport-jwt": "^4.0.1",
+		"passport-local": "^1.0.0",
 		"validator": "^13.12.0"
 	},
 	"scripts": {
@@ -33,6 +39,10 @@
 		"@types/morgan": "^1.9.4",
 		"@types/node": "^18.11.18",
 		"@types/nodemailer": "^6.4.16",
+		"@types/passport": "^1.0.17",
+		"@types/passport-google-oauth20": "^2.0.16",
+		"@types/passport-jwt": "^4.0.1",
+		"@types/passport-local": "^1.0.38",
 		"@types/validator": "^13.12.2",
 		"@typescript-eslint/eslint-plugin": "^5.18.0",
 		"@typescript-eslint/parser": "^5.18.0",

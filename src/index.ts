@@ -3,6 +3,8 @@ import { config } from 'dotenv';
 import express, { Application, Request, Response, json, urlencoded } from 'express';
 import helmet from 'helmet';
 import morgan from 'morgan';
+import Passport from 'passport';
+import './config/passport.config';
 import { errorHandler, notFound } from './http/middlewares/errorHandler.middleware';
 import RoutesMain from './routes';
 class ExpressApp {
@@ -20,6 +22,7 @@ class ExpressApp {
 		this.app.use(cors({ credentials: true, origin: '*', methods: 'GET,POST,PUT,DELETE' }));
 		this.app.use(urlencoded({ extended: true, limit: '50mb' }));
 		this.app.use(json({ limit: '50mb' }));
+		this.app.use(Passport.initialize());
 		this.app.use(helmet());
 		this.app.use(morgan('dev'));
 	}
