@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from 'express';
 import JWT from 'jsonwebtoken';
 import mongoose from 'mongoose';
 import { SendMailOptions } from 'nodemailer';
-import otpMasterModel, { OTPMasterEnum } from '../../schema/otpMaster.schema';
+import otpMasterModel, { OTPMasterEnum } from '../../schema/otpModel.schema';
 import UserModel from '../../schema/user.schema';
 import { UtilsMain } from '../../utils';
 import { HttpException } from '../exceptions/http.exceptions';

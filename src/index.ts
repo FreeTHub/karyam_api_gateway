@@ -4,6 +4,7 @@ import express, { Application, Request, Response, json, urlencoded } from 'expre
 import helmet from 'helmet';
 import morgan from 'morgan';
 import Passport from 'passport';
+import MYSQLDB from './config/database';
 import './config/passport.config';
 import { errorHandler, notFound } from './http/middlewares/errorHandler.middleware';
 import RoutesMain from './routes';
@@ -12,7 +13,7 @@ class ExpressApp {
 	private PORT: unknown;
 	private routesMain = new RoutesMain();
 	constructor() {
-		config({ path: 'env.local' });
+		config();
 		this.app = express();
 		this.PORT = process.env.PORT ?? 5000;
 		this.middleware();
@@ -39,6 +40,7 @@ class ExpressApp {
 	}
 	public listen(): void {
 		// connectDB();
+		MYSQLDB.sequelize.sync({ force: false, logging: false });
 		this.app.listen(this.PORT, () => {
 			console.log(`Server is listening on  port : ${this.PORT}`);
 		});
