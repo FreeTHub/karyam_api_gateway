@@ -19,6 +19,7 @@ export class UserModel extends Model<UserInterface, UserModelTypeAttributes> imp
 	is_registered!: boolean;
 	created_at!: Date;
 	updated_at?: Date | undefined;
+	report_count?: number | undefined;
 }
 
 export default function (sequelize: Sequelize): typeof UserModel {
@@ -34,7 +35,7 @@ export default function (sequelize: Sequelize): typeof UserModel {
 				type: DataTypes.STRING(56)
 			},
 			password: {
-				allowNull: false,
+				allowNull: true,
 				type: DataTypes.STRING(255)
 			},
 			user_name: {
@@ -89,10 +90,16 @@ export default function (sequelize: Sequelize): typeof UserModel {
 				defaultValue: false,
 				type: DataTypes.BOOLEAN
 			},
+			report_count: {
+				allowNull: true,
+				defaultValue: 0,
+				type: DataTypes.INTEGER
+			},
 			created_at: {
 				type: DataTypes.DATE,
 				defaultValue: Date.now()
 			},
+
 			updated_at: {
 				type: DataTypes.DATE,
 				allowNull: true

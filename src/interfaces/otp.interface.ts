@@ -1,5 +1,6 @@
-export enum OTPTypeEnum{
-	LOGINTYPE="LOGINTYPE"
+export enum OTPTypeEnum {
+	LOGINTYPE = 'LOGINTYPE',
+	FORGOTPASSWORD = 'FORGOTPASSWORD'
 }
 
 export enum OTPStatusEnum{
@@ -7,15 +8,16 @@ export enum OTPStatusEnum{
 	EXPIRES="EXPIRES",
 	UNUSED="UNUSED"
 }
-export interface OTPInterface{
-	id:number;
-	email:string;
-	otp_generation_time:Date;
-	otp_expiry_time:Date;
-	otp_type:OTPTypeEnum;
-	otp_value:string;
-	phone?:string;
-	otp_status:OTPStatusEnum
-	created_at:Date;
-	updated_at?:Date;
+export interface OTPInterface {
+	id: number;
+	email: string;
+	otp_generation_time: Date;
+	otp_expiry_time: Date;
+	otp_type: OTPTypeEnum;
+	otp_value: string;
+	phone?: string;
+	otp_status: OTPStatusEnum;
+	created_at: Date;
+	updated_at?: Date;
+	user_id: number;
 }

@@ -14,6 +14,7 @@ export class OTPModel extends Model<OTPInterface, OTPMasterAttributes> implement
 	phone?: string | undefined;
 	created_at!: Date;
 	updated_at?: Date | undefined;
+	user_id!: number;
 }
 
 export default function (sequelize: Sequelize): typeof OTPModel {
@@ -48,6 +49,10 @@ export default function (sequelize: Sequelize): typeof OTPModel {
 				type: DataTypes.STRING,
 				allowNull: false
 			},
+			user_id: {
+				type: DataTypes.INTEGER,
+				allowNull: false
+			},
 			created_at: {
 				type: DataTypes.DATE,
 				allowNull: false
@@ -59,7 +64,7 @@ export default function (sequelize: Sequelize): typeof OTPModel {
 		},
 
 		{
-			tableName: 'users',
+			tableName: 'otp_table',
 			sequelize
 		}
 	);

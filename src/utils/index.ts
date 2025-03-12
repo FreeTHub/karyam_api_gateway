@@ -1,3 +1,4 @@
+import bcryptjs from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { createTransport, SendMailOptions } from 'nodemailer';
 export class UtilsMain {
@@ -71,5 +72,12 @@ export class UtilsMain {
 			otp = otp + digits[Math.floor(Math.random() * digits.length)];
 		});
 		return otp;
+	}
+	static async hashedPassword(password: string) {
+		const salt = await bcryptjs.genSalt(10);
+		return await bcryptjs.hash(password, salt);
+	}
+	static async authenticatePassword({ password, hashedPassword }: { password: string; hashedPassword: string }) {
+		return await bcryptjs.compare(password, hashedPassword);
 	}
 }
