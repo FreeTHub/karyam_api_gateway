@@ -81,3 +81,13 @@ export class UtilsMain {
 		return await bcryptjs.compare(password, hashedPassword);
 	}
 }
+
+
+export const SERVICES = ['AUTHSERVICE'];
+
+export enum APIMETHODS {
+	get = 'get',
+	post = 'pos',
+	put = 'put',
+	delete = 'delete'
+}

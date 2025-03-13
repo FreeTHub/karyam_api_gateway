@@ -1,12 +1,12 @@
-import { UtilsMain } from '@/utils';
 import { config } from 'dotenv';
 import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { ExtractJwt, Strategy as JWTStrategy } from 'passport-jwt';
 import { QueryTypes } from 'sequelize';
 import POSTGRESDB from '../config/database';
+import { UtilsMain } from '../utils';
 
-config();
+config({ path: '.env.local' });
 const opts: any = {
 	jwtFromRequest: '',
 	secretOrKey: ''

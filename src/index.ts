@@ -13,7 +13,7 @@ class ExpressApp {
 	private PORT: unknown;
 	private routesMain = new RoutesMain();
 	constructor() {
-		config();
+		config({ path: '.env.local' });
 		this.app = express();
 		this.PORT = process.env.PORT ?? 5000;
 		this.middleware();

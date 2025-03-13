@@ -1,10 +1,10 @@
-import POSTGRESDB from '@/config/database';
-import { OTPStatusEnum, OTPTypeEnum } from '@/interfaces/otp.interface';
 import bcryptjs from 'bcryptjs';
 import { NextFunction, Request, Response } from 'express';
 import JWT from 'jsonwebtoken';
 import { SendMailOptions } from 'nodemailer';
 import { QueryTypes } from 'sequelize';
+import POSTGRESDB from '../../config/database';
+import { OTPStatusEnum, OTPTypeEnum } from '../../interfaces/otp.interface';
 import { UtilsMain } from '../../utils';
 import { HttpException } from '../exceptions/http.exceptions';
 export class UserController {
@@ -107,6 +107,9 @@ export class UserController {
 	}
 	static async gettingStarted(req: Request, response: Response, next: NextFunction) {
 		const transaction = await POSTGRESDB.sequelize.transaction();
+		console.log('====================================');
+		console.log('hit 111');
+		console.log('====================================');
 		try {
 			const { email } = req.body;
 			const selectUserQuery = `select * from users where email=:email`;
@@ -121,7 +124,7 @@ export class UserController {
 			// const isUserExists = await UserModel.findOne({ phoneNumber });
 			if (!!userExists && Array.isArray(userExists) && userExists.length > 0)
 				return response.status(200).json({ message: 'User already exists', navigateTo: 'LoginScreen' });
-			return response.status(200).json({ message: `User does'nt exists`, navigateTo: 'RegisterScreen' });
+			return response.status(200).json({ message: `User does not exists`, navigateTo: 'RegisterScreen' });
 		} catch (error) {
 			if (transaction) transaction.rollback();
 			next(error);

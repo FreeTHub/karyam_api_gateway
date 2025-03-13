@@ -1,8 +1,10 @@
 import { sanitize } from 'class-sanitizer';
 import { plainToInstance } from 'class-transformer';
 import { ValidationError, validate } from 'class-validator';
+import { config } from 'dotenv';
 import { NextFunction, Request, Response } from 'express';
 import { HttpException } from '../exceptions/http.exceptions';
+config({ path: '.env.local' });
 const DTOValidationMiddleware =
 	(type: any, skipMissingProperties: boolean = false) =>
 	(req: Request, res: Response, next: NextFunction) => {
