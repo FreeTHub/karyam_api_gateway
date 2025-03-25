@@ -8,13 +8,64 @@ import { OTPStatusEnum, OTPTypeEnum } from '../../interfaces/otp.interface';
 import { UtilsMain } from '../../utils';
 import { HttpException } from '../exceptions/http.exceptions';
 export class UserController {
+	static async generateOTPForRegistration(req: Request, response: Response, next: NextFunction) {
+		const transaction = await POSTGRESDB.sequelize.transaction();
+		try {
+			const { email } = req.body;
+			const selectQuery = `select * from users where email = '${email}'`;
+			const result: any[] = await POSTGRESDB.sequelize.query(selectQuery, { type: QueryTypes.SELECT, transaction });
+			if (!result || result?.length === 0) throw new HttpException(400, 'User not found');
+			const registrationOTP = UtilsMain.generateOTP();
+			const mailOptions: SendMailOptions = UtilsMain.GetMailOptions({
+				subject: `Dostbook OTP login`,
+				to: result?.[0].email,
+				expirationTime: 60,
+				name: result?.[0].name,
+				otp: registrationOTP
+			});
+			UtilsMain.sendMailMethod(mailOptions)
+				.then(async (res) => {
+					const insertQuery = `INSERT INTO otp_table (
+						email,
+						user_id,
+						otp_generation_time,
+						otp_expiry_time,
+						otp_type,
+						otp_status,
+						otp_value,
+						created_at
+					) values(
+						'${result?.[0].email}',
+						${result?.[0].id},
+						'${Date.now()}',
+						'${Date.now() + 60 * 1000}',
+						'${OTPTypeEnum.REGISTRATIONOTP}',
+						'${OTPStatusEnum.UNUSED}',
+						'${registrationOTP}',
+						'${Date.now()}',
+					)`;
+					await POSTGRESDB.sequelize.query(insertQuery, {
+						type: QueryTypes.INSERT,
+						transaction
+					});
+				})
+				.catch(() => {
+					throw new HttpException(400, 'Something went wrong');
+				});
+			await transaction.commit();
+			return response.status(200).json({ message: 'OTP sent successfully' });
+		} catch (error) {
+			console.log('error: ', error);
+			if (transaction) transaction.rollback();
+			next(error);
+		}
+	}
 	static async generateOTPForLogin(req: Request, response: Response, next: NextFunction) {
 		const transaction = await POSTGRESDB.sequelize.transaction();
 		try {
 			const { email } = req.body;
 			const selectQuery = `select * from users where email = '${email}'`;
 			const result: any[] = await POSTGRESDB.sequelize.query(selectQuery, { type: QueryTypes.SELECT, transaction });
-			await transaction.commit();
 			if (!result || result?.length === 0) throw new HttpException(400, 'User not found');
 			const loginOTP = UtilsMain.generateOTP();
 			const mailOptions: SendMailOptions = UtilsMain.GetMailOptions({
@@ -46,22 +97,22 @@ export class UserController {
 						'${Date.now()}',
 					)`;
 					await POSTGRESDB.sequelize.query(insertQuery, {
-						type: QueryTypes.SELECT,
+						type: QueryTypes.INSERT,
 						transaction
 					});
-					await transaction.commit();
-					return response.status(200).json({ message: 'OTP sent successfully' });
 				})
 				.catch(() => {
-					if (transaction) transaction.rollback();
 					throw new HttpException(400, 'Something went wrong');
 				});
+			await transaction.commit();
+			return response.status(200).json({ message: 'OTP sent successfully' });
 		} catch (error) {
+			console.log('error: ', error);
 			if (transaction) transaction.rollback();
 			next(error);
 		}
 	}
-	static async verifyOTPForLogin(req: Request, response: Response, next: NextFunction) {
+	static async VerifyOTPForLogin(req: Request, response: Response, next: NextFunction) {
 		const transaction = await POSTGRESDB.sequelize.transaction();
 		try {
 			const { otp, email } = req.body;
@@ -93,6 +144,50 @@ export class UserController {
 			const existsUserId = existingUser?.[0]?.id;
 			const { accessToken, refreshToken } = UtilsMain.generateToken(existsUserId);
 			const updateOTPQuery = `update otp_table set otp_status='${OTPStatusEnum.USED}' where otp_value=:otp and email = :email user_id = :userId  and otp_type='${OTPTypeEnum.LOGINTYPE}'`;
+			await POSTGRESDB.sequelize.query(updateOTPQuery, {
+				replacements: { otp, email, userId: existsUserId },
+				type: QueryTypes.UPDATE,
+				transaction
+			});
+			await transaction.commit();
+			response.status(200).json({ accessToken, refreshToken, user: existsUserId });
+		} catch (error) {
+			if (transaction) transaction.rollback();
+			next(error);
+		}
+	}
+	static async VerifyOTPForForRegistration(req: Request, response: Response, next: NextFunction) {
+		const transaction = await POSTGRESDB.sequelize.transaction();
+		try {
+			const { otp, email } = req.body;
+			const selectQuery = `select * from users where email = '${email}'`;
+			const existingUser: any[] = await POSTGRESDB.sequelize.query(selectQuery, { type: QueryTypes.SELECT, transaction });
+			await transaction.commit();
+			if (!existingUser || existingUser.length === 0) throw new HttpException(400, 'User not found');
+			const selectOTPQuery = `
+				SELECT * FROM otp_table where otp_value=:otp and email = :email
+				and user_id = :userId and otp_status='${OTPStatusEnum.UNUSED}' and otp_type='${OTPTypeEnum.REGISTRATIONOTP}'
+				`;
+			const otpDetails: any[] = await POSTGRESDB.sequelize.query(selectOTPQuery, {
+				replacements: { otp, email, userId: existingUser?.[0].id },
+				type: QueryTypes.SELECT,
+				transaction
+			});
+			// const otpDetails = await otpMasterModel.findOne({ otpVal: otp, userId: isUserExists._id, type: OTPMasterEnum.userlogin });
+			if (!otpDetails || otpDetails?.length === 0 || !otpDetails?.[0].otp_expiry_time) throw new HttpException(400, 'OTP not found');
+			if (new Date(otpDetails?.[0].otp_expiry_time).getTime() - Date.now() > 60000) {
+				const updateOTPQuery = `update otp_table set otp_status='${OTPStatusEnum.EXPIRES}' where otp_value=:otp and email = :email user_id = :userId  and otp_type='${OTPTypeEnum.REGISTRATIONOTP}'`;
+				await POSTGRESDB.sequelize.query(updateOTPQuery, {
+					replacements: { otp, email, userId: existingUser?.[0].id },
+					type: QueryTypes.UPDATE,
+					transaction
+				});
+				await transaction.commit();
+				return response.status(400).json({ message: 'OTP EXpires' });
+			}
+			const existsUserId = existingUser?.[0]?.id;
+			const { accessToken, refreshToken } = UtilsMain.generateToken(existsUserId);
+			const updateOTPQuery = `update otp_table set otp_status='${OTPStatusEnum.USED}' where otp_value=:otp and email = :email user_id = :userId  and otp_type='${OTPTypeEnum.REGISTRATIONOTP}'`;
 			await POSTGRESDB.sequelize.query(updateOTPQuery, {
 				replacements: { otp, email, userId: existsUserId },
 				type: QueryTypes.UPDATE,
@@ -157,6 +252,7 @@ export class UserController {
 			next(error);
 		}
 	}
+
 	static async getUserByPhoneNumber(req: Request, response: Response, next: NextFunction) {
 		const transaction = await POSTGRESDB.sequelize.transaction();
 		try {
